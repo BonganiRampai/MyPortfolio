@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Portfolio.Models.Project>
+
+@{
+    ViewData["Title"] = "Manage Projects";
+    var pagination = (Portfolio.Models.ViewModels.PaginationModel)ViewBag.Pagination;
+    string searchTerm = ViewBag.SearchTerm as string ?? "";
+}
+
+<h2>Manage Projects</h2>
+
+<form method="get" asp-action="ManageProjects" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" value="@searchTerm" class="form-control" placeholder="Search projects..." />
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+    </div>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (!Model.Any())
+{
+    <p>No projects found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>@project.Title</td>
+                    <td>@project.CreatedAt.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a asp-action="EditProject" asp-route-id="@project.Id" class="btn btn-sm btn-primary">Edit</a>
+                        <form asp-action="DeleteProject" asp-route-id="@project.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (pagination != null && pagination.TotalPages > 1)
+    {
+        <partial name="_Pagination" model="pagination" />
+    }
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to Dashboard</a>

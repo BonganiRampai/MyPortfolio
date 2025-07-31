@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Portfolio.Models.ContactMessage>
+
+@{
+    ViewData["Title"] = "Manage Messages";
+    var pagination = (Portfolio.Models.ViewModels.PaginationModel)ViewBag.Pagination;
+}
+
+<h2>Manage Messages</h2>
+
+@if (!Model.Any())
+{
+    <p>No messages found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Submitted At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var message in Model)
+            {
+                <tr>
+                    <td>@message.Name</td>
+                    <td>@message.Email</td>
+                    <td>@message.Message</td>
+                    <td>@message.SubmittedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (pagination != null && pagination.TotalPages > 1)
+    {
+        <partial name="_Pagination" model="pagination" />
+    }
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to Dashboard</a>

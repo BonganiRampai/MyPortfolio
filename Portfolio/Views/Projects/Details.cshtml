@@ -1,0 +1,24 @@
+﻿@model Portfolio.Models.Project
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h2>@Model.Title</h2>
+
+<img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid mb-3" />
+
+<p>@Model.Description</p>
+
+<p><strong>Technologies Used:</strong> @Model.Technologies</p>
+
+@if (!string.IsNullOrEmpty(Model.GitHubLink))
+{
+    <p>
+        <a href="@Model.GitHubLink" target="_blank" class="btn btn-outline-secondary">
+            View on GitHub
+        </a>
+    </p>
+}
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back to Projects</a>
